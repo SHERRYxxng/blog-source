@@ -1,0 +1,55 @@
+name: Deploy Hexo Blog
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'source/_posts/**'
+      - '_config.yml'
+      - '_config.butterfly.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Hexo site
+        run: npx hexo generate
+
+      - name: Setup SSH for deploy
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+
+      - name: Deploy to public repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git clone git@github.com:SHERRYxxng/SHERRYxxng.github.io.git /tmp/pages
+
+          cd /tmp/pages
+          find . -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+
+          cp -r ${{ github.workspace }}/public/* /tmp/pages/
+          cp -r ${{ github.workspace }}/public/.github /tmp/pages/ 2>/dev/null || true
+
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes, skipping deploy"
+          else
+            git commit -m "Site updated: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push origin main
+          fi
