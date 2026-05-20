@@ -440,7 +440,7 @@ aside:
     sort: date
     sort_order:
   card_newest_comments:
-    enable: true
+    enable: false
     sort_order:
     limit: 6
     # Unit: mins, save data to localStorage
@@ -666,7 +666,7 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use: Waline
+  use:
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -722,8 +722,8 @@ valine:
 # Waline - A simple comment system with backend support fork from Valine
 # https://waline.js.org/
 waline:
-  serverURL: https://comment.dorahonor.me/
-  # serverURL1: https://comment.dorahonor.me/
+  serverURL:
+  # serverURL1:
     # UI: https://comment.dorahonor.me/ui
   bg: /img/background/citlali.webp
   # Use Waline pageview count as the page view count
