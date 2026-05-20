@@ -70,18 +70,30 @@ else
   fi
 fi
 
-# --- 提取文件名和标题 ---
+# --- 提取文件名，自动添加日期前缀 ---
 FILENAME=$(basename "$SRC")
 TITLE="${FILENAME%.md}"
+
+# 提取源文件修改日期（YYYY-MM-DD），失败则用今天
+FILE_DATE=$(stat -c %Y "$SRC" 2>/dev/null | xargs -I{} date -d @{} +%Y-%m-%d 2>/dev/null || date +%Y-%m-%d)
+
+# 如果文件名已有日期前缀则跳过，否则添加
+if ! echo "$FILENAME" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}-'; then
+  DATED_FILENAME="${FILE_DATE}-${FILENAME}"
+else
+  DATED_FILENAME="$FILENAME"
+fi
+
 TARGET_DIR="$POSTS_DIR/$CATEGORY"
-TARGET_FILE="$TARGET_DIR/$FILENAME"
+TARGET_FILE="$TARGET_DIR/$DATED_FILENAME"
 
 echo "============================================"
 echo "  博客文件导入"
 echo "============================================"
 echo "  源文件:     $SRC"
 echo "  分类路径:   $CATEGORY"
-echo "  目标位置:   source/_posts/$CATEGORY/$FILENAME"
+echo "  文件日期:   $FILE_DATE"
+echo "  目标位置:   source/_posts/$CATEGORY/$DATED_FILENAME"
 echo "============================================"
 
 # --- 创建目标目录 ---
@@ -107,7 +119,7 @@ $(
     [ "$tag" != "${CAT_PARTS[0]}" ] && echo "  - $tag"
   done
 )
-date: $(date +%Y-%m-%d)
+date: $FILE_DATE
 ---
 
 $(cat "$TARGET_FILE")
