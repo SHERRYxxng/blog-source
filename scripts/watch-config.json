@@ -1,0 +1,12 @@
+{
+  "watches": [
+    {
+      "dir": "E:/work/Nightingale/docs",
+      "category": "工作/电话告警"
+    },
+    {
+      "dir": "C:/Users/13247/IDEA project/work/dandelion-backend",
+      "category": "工作/蒲公英/后端"
+    }
+  ]
+}
