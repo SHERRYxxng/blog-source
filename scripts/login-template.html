@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+        }
+        .login-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .login-box .icon { font-size: 48px; margin-bottom: 16px; }
+        .login-box h2 { font-size: 20px; margin-bottom: 8px; color: #f0f0f0; }
+        .login-box .subtitle { font-size: 13px; color: #999; margin-bottom: 24px; }
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: #f0f0f0;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .login-box input:focus { border-color: rgba(76,175,80,0.6); }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #43a047, #66bb6a);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 8px;
+        }
+        .login-box button:hover { opacity: 0.9; }
+        .error {
+            color: #ef5350;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="icon">🔒</div>
+        <h2>{{title}}</h2>
+        <div class="subtitle">此内容已加密，请输入账号和密码</div>
+        <input type="text" id="username" placeholder="账号" autocomplete="username" autofocus>
+        <input type="password" id="password" placeholder="密码" autocomplete="current-password">
+        <button onclick="tryDecrypt()">解 密</button>
+        <div class="error" id="error"></div>
+    </div>
+
+    <div id="content" style="display:none"></div>
+
+    <script>
+    const VALID_USERNAME = 'SHERRY';
+    const TEMPLATE_REMEMBER = "记住我";
+    const HIDE_PASSWORD = "隐藏密码";
+    const SHOW_PASSWORD = "显示密码";
+
+    async function tryDecrypt() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const errorEl = document.getElementById('error');
+
+        if (username !== VALID_USERNAME) {
+            errorEl.textContent = '账号或密码错误';
+            return;
+        }
+
+        if (!password) {
+            errorEl.textContent = '请输入密码';
+            return;
+        }
+
+        try {
+            const encryptedContent = document.getElementById('encrypted-content').textContent.trim();
+            const decrypted = await decrypt(encryptedContent, password);
+            if (decrypted) {
+                document.querySelector('.login-box').style.display = 'none';
+                document.getElementById('content').innerHTML = decrypted;
+                document.getElementById('content').style.display = 'block';
+                document.title = '{{title}}';
+            } else {
+                errorEl.textContent = '账号或密码错误';
+            }
+        } catch(e) {
+            errorEl.textContent = '解密失败，密码错误';
+        }
+    }
+
+    document.getElementById('password').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') tryDecrypt();
+    });
+    </script>
+
+    <script id="encrypted-content" type="text/plain">{{encrypted_content}}</script>
+    <script>{{decrypt_function}}</script>
+</body>
+</html>

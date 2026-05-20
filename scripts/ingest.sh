@@ -84,6 +84,9 @@ echo "  → hexo generate..."
 cd "$PROJECT_DIR"
 npx hexo generate --silent 2>/dev/null
 
+# --- 加密生活分类 ---
+bash "$SCRIPT_DIR/protect.sh"
+
 # --- 部署到公开仓库 ---
 if [ ! -d "$PUBLIC_REPO/.git" ]; then
   echo "  → 克隆公开仓库..."

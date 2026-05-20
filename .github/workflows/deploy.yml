@@ -28,6 +28,16 @@ jobs:
       - name: Generate Hexo site
         run: npx hexo generate
 
+      - name: Encrypt protected posts
+        run: |
+          if [ -n "${{ secrets.PROTECT_PASSWORD }}" ]; then
+            echo -n "${{ secrets.PROTECT_PASSWORD }}" > .passwd
+            bash scripts/protect.sh
+            rm -f .passwd
+          else
+            echo "No PROTECT_PASSWORD secret set, skipping encryption"
+          fi
+
       - name: Setup SSH for deploy
         uses: webfactory/ssh-agent@v0.9.0
         with:
