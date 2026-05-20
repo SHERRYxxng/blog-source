@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: mskk 的个人博客
+title: SHERRY 的个人博客
 subtitle: 大家我都喜欢哦
 description: Everyone I like
 keywords:
-  - mskk
+  - SHERRY
   - Dora Honor
   - 博客
   - 部落格
@@ -221,4 +221,4 @@ search:
 algolia:
   applicationID: 'CGDOXH8ER1'
   apiKey: '47971ae24f203f2bc1d64fab58739195'
-  indexName: 'mskk’s blog'
+  indexName: ‘SHERRY’s blog’

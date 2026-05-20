@@ -76,9 +76,13 @@ function addFrontMatter(content, filePath, category) {
   const categoryTags = category.split('/').filter(Boolean);
   const tags = [categoryTags[categoryTags.length - 1]];
 
+  // Hierarchical categories: 工作/电话告警 → categories: [工作, 电话告警]
+  const categoryLines = categoryTags.map(c => `  - ${c}`).join('\n');
+
   return `---
 title: ${title}
-categories: ${categoryTags[0] || '工作'}
+categories:
+${categoryLines}
 tags:
 ${tags.map(t => `  - ${t}`).join('\n')}
 date: ${new Date().toISOString().split('T')[0]}

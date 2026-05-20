@@ -12,7 +12,7 @@ comments: true
 
 ## 自介
 
-我是 Dora Honor，别名简称 mskk。你可以叫我 DH。
+我是 Dora Honor，别名简称 SHERRY。你可以叫我 DH。
 
 2002 年 4 月 23 日出生，江西人，家乡在江西省赣州市全南县。目前在日留学。
 
