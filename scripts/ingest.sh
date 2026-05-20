@@ -5,10 +5,13 @@
 #   bash scripts/ingest.sh <源文件.md> [分类路径]
 #
 # 示例:
-#   bash scripts/ingest.sh "E:/work/Nightingale/docs/多平台电话告警方案调研与对比.md" "工作/电话告警/调研结果"
-#   bash scripts/ingest.sh "E:/work/xxx.md"                           # 默认 → 工作/随笔
+#   bash scripts/ingest.sh "E:/work/Nightingale/docs/xxx.md"
+#     → 自动识别 watch-config.json 映射，找不到则默认 工作/随笔
 #
-# 写完后自动: hexo generate → 复制到公开仓库 → 提交推送
+#   bash scripts/ingest.sh "E:/work/xxx.md" "生活/相册"
+#     → 手动指定分类路径
+#
+# 自动: hexo generate → protect.sh 加密 → 部署公开仓库 → 推送私人仓库
 
 set -e
 
@@ -17,20 +20,54 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 POSTS_DIR="$PROJECT_DIR/source/_posts"
 PUBLIC_REPO="/tmp/SHERRYxxng.github.io"
 DEFAULT_CATEGORY="工作/随笔"
+CONFIG_FILE="$SCRIPT_DIR/watch-config.json"
 
 # --- 参数 ---
 SRC="$1"
-CATEGORY="${2:-$DEFAULT_CATEGORY}"
 
 if [ -z "$SRC" ]; then
   echo "用法: bash scripts/ingest.sh <源文件.md> [分类路径]"
-  echo "示例: bash scripts/ingest.sh 'E:/work/xxx.md' '工作/电话告警/调研结果'"
+  echo ""
+  echo "示例:"
+  echo "  bash scripts/ingest.sh 'E:/work/Nightingale/docs/xxx.md'"
+  echo "  bash scripts/ingest.sh 'E:/work/xxx.md' '生活/相册'"
   exit 1
 fi
 
 if [ ! -f "$SRC" ]; then
   echo "错误: 文件不存在 — $SRC"
   exit 1
+fi
+
+# --- 智能识别分类路径 ---
+detect_category() {
+  local src_path="$1"
+
+  # 规范化路径
+  src_path=$(cd "$(dirname "$src_path")" 2>/dev/null && pwd || echo "$(dirname "$src_path")")
+  src_path="$src_path/$(basename "$1")"
+
+  if [ ! -f "$CONFIG_FILE" ]; then
+    echo "$DEFAULT_CATEGORY"
+    return
+  fi
+
+  # 调用 node 辅助脚本识别分类
+  node "$SCRIPT_DIR/detect-category.js" "$src_path" 2>/dev/null || echo "$DEFAULT_CATEGORY"
+  return
+}
+
+# 判断分类：手动指定 > 自动识别 > 默认
+if [ -n "${2:-}" ]; then
+  CATEGORY="$2"
+  echo "  分类方式: 手动指定"
+else
+  CATEGORY=$(detect_category "$SRC")
+  if [ "$CATEGORY" = "$DEFAULT_CATEGORY" ]; then
+    echo "  分类方式: 默认（工作/随笔）"
+  else
+    echo "  分类方式: 自动识别（$CATEGORY）"
+  fi
 fi
 
 # --- 提取文件名和标题 ---

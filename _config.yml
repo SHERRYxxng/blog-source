@@ -213,9 +213,9 @@ nofollow:
   field: site # Apply to the whole site
 
 search:
-  path: search.xml
+  path: search.json
   field: post
-  format: html
+  format: striptags
   limit: 10000
 
 algolia:
