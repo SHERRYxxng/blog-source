@@ -55,9 +55,9 @@ code_blocks:
 social:
   fas fa-house: https://dorahonor.me || Home # || '#ff6f61'
   fas fa-link: https://home.dorahonor.me || 引导页 # || '#6f42c1'
-  fab fa-github: https://github.com/Dora-Honor || Github # || '#24292e'
+  fab fa-github: https://github.com/SHERRYxxng || Github # || '#24292e'
   fas fa-rss: /atom.xml || Feed # || '#ff6600'
-  # fab fa-git-alt: https://github.com/Dora-Honor/blog.dorahonor.me || 源代码 Source Code || '#f05030'
+  fab fa-git-alt: https://github.com/SHERRYxxng/SHERRYxxng.github.io || 源代码 Source Code || '#f05030'
   fas fa-envelope: mailto:dorahonor903@163.com || Email # || '#4a7dbe'
   fab fa-google: mailto:dorahonor@gmail.com || Gmail # || '#4285f4'
   fab fa-microsoft: mailto:dorahonor903@outlook.com || Outlook # || '#0078d4'
@@ -234,7 +234,7 @@ toc:
 post_copyright:
   enable: true
   decode: true
-  author_href: https://dorahonor.me
+  author_href: https://sherryxxng.github.io
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
@@ -256,7 +256,7 @@ post_edit:
   enable: true
   # url: https://github.com/user-name/repo-name/edit/branch-name/subdirectory-name/
   # For example: https://github.com/jerryc127/butterfly.js.org/edit/main/source/
-  url: https://github.com/Dora-Honor/blog.dorahonor.me/edit/main/source/
+  url: https://github.com/SHERRYxxng/SHERRYxxng.github.io/edit/main/
 
 # Related Articles
 related_post:
