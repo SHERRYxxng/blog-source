@@ -1,7 +1,7 @@
 // 智能识别分类路径
 // 用法: node scripts/detect-category.js <文件路径>
 const path = require('path');
-const config = require('./_watch-config.json');
+const config = require('../tools/watch-config.json');
 
 const srcPath = process.argv[2].replace(/\\/g, '/');
 

@@ -1,10 +1,9 @@
-#!/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-const CONFIG_FILE = path.join(__dirname, "watch-config.json");
 const PROJECT_ROOT = path.join(__dirname, "..");
+const CONFIG_FILE = path.join(PROJECT_ROOT, "tools", "watch-config.json");
 const POSTS_DIR = path.join(PROJECT_ROOT, "source", "_posts");
 const DEFAULT_CATEGORY = "工作/随笔";
 
@@ -69,10 +68,9 @@ function processFile(filePath, category) {
   if (!watchEntry) return false;
 
   const cat = category || watchEntry.category || DEFAULT_CATEGORY;
-  const targetSubDir = cat.replace(/\/g, "/");
+  const targetSubDir = cat.replace(/\\/g, "/");
   const targetDir = path.join(POSTS_DIR, targetSubDir);
 
-  // Date prefix on filename
   const baseName = path.basename(filePath);
   const today = new Date().toISOString().split("T")[0];
   const datedName = /^\d{4}-\d{2}-\d{2}-/.test(baseName)
@@ -98,11 +96,10 @@ function processFile(filePath, category) {
 function deploy() {
   console.log("[watch] Running hexo generate...");
   execSync("npx hexo generate", { cwd: PROJECT_ROOT, stdio: "inherit" });
-  try { execSync("bash scripts/protect.sh", { cwd: PROJECT_ROOT, stdio: "inherit" }); } catch (e) {}
 
-  console.log("[watch] Deploying to public repo...");
   const publicRepo = path.join(PROJECT_ROOT, "..", "sherry-pages");
   if (!fs.existsSync(path.join(publicRepo, ".git"))) {
+    console.log("[watch] Cloning public repo...");
     execSync('git clone git@github.com:SHERRYxxng/SHERRYxxng.github.io.git "' + publicRepo + '"', { stdio: "inherit" });
   }
 
@@ -131,16 +128,50 @@ function scan() {
 const args = process.argv.slice(2);
 
 if (args[0] === "add") {
-  if (args.length < 3) { console.log('Usage: node scripts/watch.js add <dir> <category>'); process.exit(1); }
+  if (args.length < 3) {
+    console.log("Usage: node scripts/watch.js add <dir> <category>");
+    console.log('Example: node scripts/watch.js add "E:/work/Nightingale/docs" "工作/电话告警"');
+    process.exit(1);
+  }
   addWatchDir(args[1], args[2]);
-} else if (args[0] === "list") {
+  process.exit(0);
+}
+
+if (args[0] === "list") {
   const config = loadConfig();
   console.log("Watched directories:");
   for (const w of config.watches) console.log(`  ${w.dir} → ${w.category}`);
-} else if (args[0] === "--once") {
-  console.log("[watch] Scanning once...");
-  if (scan()) { deploy(); } else { console.log("[watch] No changes detected."); }
-} else {
-  console.log("[watch] Starting watcher... polling every 30s. Ctrl+C to stop.");
-  setInterval(() => { if (scan()) { try { deploy(); } catch (e) { console.error(e.message); } } }, 30000);
+  process.exit(0);
 }
+
+if (args[0] === "--deploy") {
+  console.log("[watch] Force deploy (skip scan)...");
+  deploy();
+  process.exit(0);
+}
+
+if (args[0] === "--once") {
+  console.log("[watch] Scanning once...");
+  const changed = scan();
+  console.log(changed ? "[watch] Changes synced." : "[watch] No new files.");
+  console.log("[watch] Generating and deploying...");
+  deploy();
+  process.exit(0);
+}
+
+// Default: watch mode
+console.log("[watch] Starting file watcher...");
+const config = loadConfig();
+console.log("[watch] Watching " + config.watches.length + " directories");
+for (const w of config.watches) {
+  console.log("  " + w.dir + " → " + w.category);
+}
+
+setInterval(() => {
+  if (scan()) {
+    console.log("[watch] Changes detected, deploying...");
+    try { deploy(); } catch (e) { console.error("[watch] Deploy error:", e.message); }
+  }
+}, 30000);
+
+console.log("[watch] Polling every 30s. Press Ctrl+C to stop.");

@@ -80,7 +80,7 @@ console.log("\n生成静态页面...");
 execSync("npx hexo generate", { cwd: PROJECT_ROOT, stdio: "inherit" });
 
 // 保护
-try { execSync("bash scripts/protect.sh", { cwd: PROJECT_ROOT, stdio: "inherit" }); } catch (e) {}
+try { execSync("bash tools/protect.sh", { cwd: PROJECT_ROOT, stdio: "inherit" }); } catch (e) {}
 
 // 部署
 console.log("部署到公开仓库...");

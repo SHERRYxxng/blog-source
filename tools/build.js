@@ -77,7 +77,7 @@ console.log("\n生成 HTML...");
 execSync("npx hexo generate", { cwd: PROJECT_ROOT, stdio: "inherit" });
 
 // 加密
-try { execSync("bash scripts/protect.sh", { cwd: PROJECT_ROOT, stdio: "inherit" }); } catch (e) {}
+try { execSync("bash tools/protect.sh", { cwd: PROJECT_ROOT, stdio: "inherit" }); } catch (e) {}
 
 // 部署到公开仓库
 console.log("部署...");

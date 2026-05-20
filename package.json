@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "node tools/build.js",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server"
