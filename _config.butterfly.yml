@@ -431,16 +431,7 @@ aside:
       link: https://github.com/Dora-Honor/blog.dorahonor.me
   card_announcement:
     enable: true
-    content: |
-      <p>截止 2026 年 1 月 4 日，我的官服绝区零站点<strong>已满员，不可再申请！</strong></p>
-      <hr>
-      <div align="center"><h2>关于域名更换的公告</h2></div>
-      <p>2026 年 1 月 24 日更新</p>
-      <p>经实测，使用 Cloudflare CDN 加速 GitHub Pages 站点效果在国内貌似不太好，并且也要将主域名改为个人引导页面。</p>
-      <p>目前已从 GitHub Pages 转移到 Vercel 新加坡区部署，域名也改为了 <code>blog.dorahonor.me</code>，实测访问速度有显著提升。</p>
-      <p>原有的根域名 <code>dorahonor.me</code> 在 2 月初之前仍为博客页，但建议及时更新收藏夹中的链接。</p>
-      <p>根域名 <code>dorahonor.me</code> 将在 2 月初左右换成个人引导页。欢迎访问！</p>
-      <p>感谢大家一直以来的支持与关注！</p>
+    content: 暂无
   card_recent_post:
     enable: true
     # If set 0 will show all
