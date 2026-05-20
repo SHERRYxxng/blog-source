@@ -43,6 +43,7 @@ skip_render:
   - CNAME
   - atom.xml
   - live2d-widget/demo/*.html
+  - .nojekyll
   - LICENSE
 
 # Writing
